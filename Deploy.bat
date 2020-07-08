@@ -1,1 +1,1 @@
-echo"Deploying project :%date%:%time%"
+echo"Deployed file"
