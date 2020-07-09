@@ -1,47 +1,36 @@
 pipeline
 {
-agent none
+agent any
 stages
 {
-stage('Non-Parallel stage')
+stage('Compile Stage')
 {
-agent
-{
-label "master"
-}
 steps
 {
-echo 'This stage will be excuted first'
+withMaven(maven : 'M2_HOME')
+{
+sh 'mvn clean compile'
 }
 }
-stage('Run Tests')
-{
-parallel
-{
-stage('Test On Windows')
-{
-agent
-{
-label "Windows_Node"
 }
+stage('Testing Stage')
+{
 steps
 {
-echo "Task1 on Agent"
-}
-}
-stage('Test On Master')
+withMaven(maven : 'M2_HOME')
 {
-agent
-{
-label "master"
+sh 'mvn test'
 }
+}
+}
+stage('Deployment Stage')
+{
 steps
 {
-echo "Task1 on master"
+withMaven(maven : 'M2_HOME')
+{
+sh 'mvn deploy'
 }
 }
 }
 }
-}
-}
-  
